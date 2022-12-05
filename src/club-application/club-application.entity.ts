@@ -12,12 +12,12 @@ export class ClubApplication {
     @ApiProperty()
     @ManyToOne(type => User)
     @JoinColumn()
-    userId: User;
+    user: User;
 
     @ApiProperty()
     @ManyToOne(type => Club)
     @JoinColumn()
-    clubId: Club;
+    club: Club;
 
     @ApiProperty()
     @CreateDateColumn({
