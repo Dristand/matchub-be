@@ -21,7 +21,7 @@ export class Club {
 
     @ApiProperty()
     @Column()
-    contactPersonName: number;
+    contactPersonName: string;
 
     @ApiProperty()
     @Column()
