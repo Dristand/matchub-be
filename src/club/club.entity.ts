@@ -25,5 +25,5 @@ export class Club {
 
     @ApiProperty()
     @Column()
-    contactPersonNumber: number;
+    contactPersonNumber: string;
 }
