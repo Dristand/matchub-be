@@ -1,5 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
+import {ClubApplication} from "../club-application/club-application.entity";
 
 @Entity()
 export class Club {
@@ -30,4 +31,12 @@ export class Club {
     @ApiProperty()
     @Column()
     contactPersonNumber: string;
+
+    @ApiProperty()
+    @OneToMany("ClubApplication",
+        (clubApplication: ClubApplication) => clubApplication.club,
+        {eager: true}
+        )
+    applicantList: ClubApplication[];
+
 }

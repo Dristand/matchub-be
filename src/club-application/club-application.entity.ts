@@ -10,13 +10,17 @@ export class ClubApplication {
     id: number;
 
     @ApiProperty()
-    @ManyToOne(type => User)
-    @JoinColumn()
+    @ManyToOne("User",
+        (user: User) => user.applicationList
+    )
+    @JoinColumn({name: 'user_id'})
     user: User;
 
     @ApiProperty()
-    @ManyToOne(type => Club)
-    @JoinColumn()
+    @ManyToOne("Club",
+        (club: Club) => club.applicantList
+        )
+    @JoinColumn({name: 'club_id'})
     club: Club;
 
     @ApiProperty()

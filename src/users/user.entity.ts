@@ -1,8 +1,9 @@
-import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
+import {ClubApplication} from "../club-application/club-application.entity";
 
 // Note :
-// Future Development, make a subclass for Student and Club (move studentId to Student)
+// Future Development, make a subclass for Student and ClubOwner (move studentId to Student)
 @Entity()
 export class User {
 
@@ -18,7 +19,17 @@ export class User {
     fullName: string;
 
     @ApiProperty()
-    @PrimaryColumn()
+    @Column({unique: true})
     email: string;
 
+    @ApiProperty()
+    @Column()
+    password: string;
+
+    @ApiProperty()
+    @OneToMany("ClubApplication",
+        (clubApplication: ClubApplication) => clubApplication.user,
+        {eager: true}
+    )
+    applicationList: ClubApplication[];
 }

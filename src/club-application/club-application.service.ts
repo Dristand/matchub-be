@@ -8,4 +8,11 @@ export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> 
     constructor(@InjectRepository(ClubApplication) repo) {
         super(repo);
     }
+
+    async createApplication(clubId, studentId): Promise<any> {
+        let status: number;
+
+
+        return status;
+    }
 }
