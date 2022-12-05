@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
 
 // Note :
@@ -15,9 +15,10 @@ export class User {
 
     @ApiProperty()
     @Column()
-    firstName: string;
+    fullName: string;
 
     @ApiProperty()
-    @Column()
-    lastName: string;
+    @PrimaryColumn()
+    email: string;
+
 }
