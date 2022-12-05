@@ -20,6 +20,10 @@ export class Club {
     lastYearActiveMember: number;
 
     @ApiProperty()
+    @Column({default: 0})
+    registrationFee: number;
+
+    @ApiProperty()
     @Column()
     contactPersonName: string;
 
