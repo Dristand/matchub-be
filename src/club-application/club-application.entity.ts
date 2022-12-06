@@ -11,14 +11,16 @@ export class ClubApplication {
 
     @ApiProperty()
     @ManyToOne("User",
-        (user: User) => user.applicationList
+        (user: User) => user.applicationList,
+        {cascade: true, onDelete: "CASCADE"}
     )
     @JoinColumn({name: 'user_id'})
     user: User;
 
     @ApiProperty()
     @ManyToOne("Club",
-        (club: Club) => club.applicantList
+        (club: Club) => club.applicantList,
+        {cascade: true, onDelete: "CASCADE"}
         )
     @JoinColumn({name: 'club_id'})
     club: Club;

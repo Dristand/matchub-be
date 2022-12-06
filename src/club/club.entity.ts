@@ -35,7 +35,7 @@ export class Club {
     @ApiProperty()
     @OneToMany("ClubApplication",
         (clubApplication: ClubApplication) => clubApplication.club,
-        {eager: true}
+        {eager: true},
         )
     applicantList: ClubApplication[];
 
