@@ -32,4 +32,8 @@ export class User {
         {eager: true}
     )
     applicationList: ClubApplication[];
+
+    @ApiProperty()
+    @Column({default: "$2b$10$hYYjHEeD.Ln6MYk8/lIP4u"}) //TODO: remove default
+    passwordSalt: string;
 }
