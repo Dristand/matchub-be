@@ -8,6 +8,7 @@ import {ClubApplication} from "../club-application/club-application.entity";
 @Module({
   imports: [TypeOrmModule.forFeature([User, ClubApplication])],
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
+  exports: [UsersService]
 })
 export class UsersModule {}

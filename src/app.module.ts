@@ -4,8 +4,10 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import { ClubModule } from './club/club.module';
 import { ClubApplicationModule } from './club-application/club-application.module';
 import { AuthModule } from './auth/auth.module';
+import {AppController} from "./app.controller";
 
 @Module({
+  controllers: [AppController],
   imports: [TypeOrmModule.forRoot({
     type: 'postgres',
     host: 'localhost',
