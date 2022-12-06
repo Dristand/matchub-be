@@ -14,10 +14,16 @@ export class ClubController implements  CrudController<Club> {
 
     }
 
-    @Get('/available/:id')
-    async availableClubList(@Param('id') userId: number): Promise<Club[]> {
-        const result = await this.service.AvailableClubList(userId);
-        console.log(result)
+    /**
+     * Controller for getClubListForStudent
+     *
+     * @param status: string
+     * @param studentId: number
+     */
+    @Get('/:status/:studentId')
+    async getClubListForStudent(@Param('status') status: string,
+                                @Param('studentId') studentId: number): Promise<Club[]> {
+        const result = await this.service.getClubListForStudent(studentId, status);
 
         return result;
     }

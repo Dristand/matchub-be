@@ -8,6 +8,9 @@ import {User} from "../users/user.entity";
 
 @Injectable()
 export class ClubService extends TypeOrmCrudService<Club> {
+    private AppliedKeyword: string = "applied";
+    private AvailableKeyword: string = "available";
+
     private clubApplicationRepository: Repository<ClubApplication>;
     private userRepository: Repository<User>;
 
@@ -19,27 +22,26 @@ export class ClubService extends TypeOrmCrudService<Club> {
         this.userRepository = userRepo;
     }
 
-    async AvailableClubList(studentId): Promise<Club[]> {
+    /**
+     * Return ClubList requested by student based on its status (applied/available club)
+     *
+     * @param studentId: number
+     * @param status: string (const on class attribute)
+     */
+    async getClubListForStudent(studentId, status): Promise<Club[]> {
         const studentUser: User = await this.userRepository.findOneBy({id: studentId})
 
         if (studentUser == null) {
             return [];
         }
-        console.log(studentUser);
 
-        // TODO: Optimize this
-        // const clubList: Club[] = await this.repo
-        //     .createQueryBuilder('club')
-        //     .leftJoinAndSelect(
-        //         (builder) => builder.select().from(ClubApplication, 'ca')
-        //             .where('ca.user_id = :userId', {userId: studentUser.id})
-        //         , 'clubApplication', '"clubApplication"."club_id" = "club"."id"'
-        //     )
-        //     .getMany();
-
-        const clubApplication: ClubApplication[] = await this.clubApplicationRepository
-            .find({where: {user: studentUser}, relations: ['club']})
-        console.log(clubApplication[0].club)
+        const clubApplication: ClubApplication[] = await this.clubApplicationRepository.find({
+            where: {user: {id: studentId}},
+            relations: {
+                club: true,
+                user: true,
+            }
+        })
 
         const clubList: Club[] = await this.repo.find();
         const result: Club[] = [];
@@ -54,7 +56,8 @@ export class ClubService extends TypeOrmCrudService<Club> {
                 }
             }
 
-            if (!applied) result.push(club);
+            if (status === this.AvailableKeyword && !applied) result.push(club);
+            if (status === this.AppliedKeyword && applied) result.push(club);
         }
 
         return result;
