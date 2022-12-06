@@ -3,6 +3,7 @@ import { UsersModule } from './users/users.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import { ClubModule } from './club/club.module';
 import { ClubApplicationModule } from './club-application/club-application.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -18,6 +19,7 @@ import { ClubApplicationModule } from './club-application/club-application.modul
   }),
     UsersModule,
     ClubModule,
-    ClubApplicationModule],
+    ClubApplicationModule,
+    AuthModule],
 })
 export class AppModule {}
