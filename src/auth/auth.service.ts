@@ -9,12 +9,11 @@ export class AuthService {
     }
 
     async validateUser(email: string, password: string): Promise<any> {
-        const user = await this.usersService.findByEmail(email);
-        console.log(user);
+        const user = await this.usersService.findOne({where: {email: email}});
 
         // TODO: Encrypt the password with hash
         if (user && user.password === password) {
-            const {password, email, ...rest} = user;
+            const {password, ...rest} = user;
 
             return rest;
         }
