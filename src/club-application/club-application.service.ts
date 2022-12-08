@@ -4,7 +4,6 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Club} from "../club/club.entity";
 import {Repository} from "typeorm";
 import {User} from "../users/user.entity";
-import {ClubApplicationCreateDto} from "./dto/club-application.create.dto";
 
 @Injectable()
 export class ClubApplicationService {
@@ -23,10 +22,11 @@ export class ClubApplicationService {
     /**
      * Create clubApplication based on validated ClubApplicationCreateDto
      *
-     * @param clubApplicationCreateDto
+     * @param clubId
+     * @param userFromJwt user entity extracted from jwt token
      */
-    async createApplication(clubApplicationCreateDto: ClubApplicationCreateDto): Promise<ClubApplication> {
-        const {clubId, studentId} = clubApplicationCreateDto;
+    async createApplication(clubId: number, userFromJwt: User): Promise<ClubApplication> {
+        const {studentId} = userFromJwt;
 
         // check if club exists
         const club: Club = await this.clubRepository.findOne({where: {id: clubId}});
@@ -34,13 +34,27 @@ export class ClubApplicationService {
             throw new HttpException(`Club with id ${clubId} does not exist`, HttpStatus.BAD_REQUEST);
         }
 
-        // check if user exists
+        // check if user exists (to be removed when JWT edge cases removal implemented)
         const student: User = await this.userRepository.findOne({where: {id: studentId}});
         if (student == null) {
             throw new HttpException(`User with id ${studentId} does not exist`, HttpStatus.BAD_REQUEST);
         }
 
-        const clubApplication = this.fillClubApplicationEntity(club, student);
+        // check if user applied to the club already
+        let clubApplication: ClubApplication = await this.clubApplicationRepository.findOne({
+            where: {club: {id: clubId}, user: {id: studentId}},
+            relations: {
+                club: true,
+                user: true,
+            }
+        })
+        if (clubApplication != null) {
+            throw new HttpException(
+                `Club Application with club id ${clubId} and user id ${studentId} already exists`,
+                HttpStatus.BAD_REQUEST);
+        }
+
+        clubApplication = this.fillClubApplicationEntity(club, student);
         await this.clubApplicationRepository.save(clubApplication);
 
         delete clubApplication.club.applicantList;
