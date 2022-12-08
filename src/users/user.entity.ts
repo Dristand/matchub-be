@@ -34,12 +34,9 @@ export class User {
     )
     applicationList: ClubApplication[];
 
-    @ApiProperty()
-    @Column()
-    passwordSalt: string;
 
     @BeforeInsert()  async hashPassword() {
-        this.passwordSalt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, this.passwordSalt);
+        const passwordSalt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, passwordSalt);
     }
 }
