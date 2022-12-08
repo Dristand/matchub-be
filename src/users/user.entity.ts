@@ -1,6 +1,7 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
 import {ClubApplication} from "../club-application/club-application.entity";
+import * as bcrypt from 'bcrypt';
 
 // Note :
 // Future Development, make a subclass for Student and ClubOwner (move studentId to Student)
@@ -34,6 +35,11 @@ export class User {
     applicationList: ClubApplication[];
 
     @ApiProperty()
-    @Column({default: "$2b$10$hYYjHEeD.Ln6MYk8/lIP4u"}) //TODO: remove default
+    @Column()
     passwordSalt: string;
+
+    @BeforeInsert()  async hashPassword() {
+        this.passwordSalt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, this.passwordSalt);
+    }
 }
