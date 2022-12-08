@@ -26,7 +26,7 @@ export class ClubApplicationService {
      * @param userFromJwt user entity extracted from jwt token
      */
     async createApplication(clubId: number, userFromJwt: User): Promise<ClubApplication> {
-        const {studentId} = userFromJwt;
+        const {userId} = userFromJwt;
 
         // check if club exists
         const club: Club = await this.clubRepository.findOne({where: {id: clubId}});
@@ -35,14 +35,14 @@ export class ClubApplicationService {
         }
 
         // check if user exists (to be removed when JWT edge cases removal implemented)
-        const student: User = await this.userRepository.findOne({where: {id: studentId}});
+        const student: User = await this.userRepository.findOne({where: {id: userId}});
         if (student == null) {
-            throw new HttpException(`User with id ${studentId} does not exist`, HttpStatus.BAD_REQUEST);
+            throw new HttpException(`User with id ${userId} does not exist`, HttpStatus.BAD_REQUEST);
         }
 
         // check if user applied to the club already
         let clubApplication: ClubApplication = await this.clubApplicationRepository.findOne({
-            where: {club: {id: clubId}, user: {id: studentId}},
+            where: {club: {id: clubId}, user: {id: userId}},
             relations: {
                 club: true,
                 user: true,
@@ -50,13 +50,14 @@ export class ClubApplicationService {
         })
         if (clubApplication != null) {
             throw new HttpException(
-                `Club Application with club id ${clubId} and user id ${studentId} already exists`,
+                `Club Application with club id ${clubId} and user id ${userId} already exists`,
                 HttpStatus.BAD_REQUEST);
         }
 
         clubApplication = this.fillClubApplicationEntity(club, student);
         await this.clubApplicationRepository.save(clubApplication);
 
+        // remove sensitive information
         delete clubApplication.club.applicantList;
         delete clubApplication.user.password;
 

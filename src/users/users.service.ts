@@ -29,7 +29,7 @@ export class UsersService {
         }
 
         // check if studentId used already
-        user = await this.userRepository.findOne({where: {studentId: studentId}});
+        user = await this.userRepository.findOne({where: {userId: studentId}});
         if (user != null) {
             throw new HttpException('Student ID is already being used by another user', HttpStatus.BAD_REQUEST);
         }
@@ -37,6 +37,7 @@ export class UsersService {
         user = this.fillUserEntity(studentId, fullName, email, password)
         await this.userRepository.save(user);
 
+        // remove sensitive information
         delete user.password;
 
         return user;
@@ -55,7 +56,7 @@ export class UsersService {
     private fillUserEntity(studentId, fullName, email, password): User {
         const user: User = new User();
 
-        user.studentId = studentId;
+        user.userId = studentId;
         user.fullName = fullName;
         user.email = email;
         user.password = password;

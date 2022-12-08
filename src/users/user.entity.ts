@@ -13,7 +13,7 @@ export class User {
 
     @ApiProperty()
     @Column({unique: true})
-    studentId: number;
+    userId: number;
 
     @ApiProperty()
     @Column()
