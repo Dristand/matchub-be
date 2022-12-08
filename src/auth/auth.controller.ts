@@ -23,8 +23,6 @@ export class AuthController {
 
     @Post('/register')
     async register(@Body() userCreateDto: UserCreateDto): Promise<any> {
-        console.log(userCreateDto);
-
         return await this.authService.register(userCreateDto);
     }
 }
