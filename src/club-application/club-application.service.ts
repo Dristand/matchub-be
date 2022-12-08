@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {TypeOrmCrudService} from "@nestjsx/crud-typeorm";
 import {ClubApplication} from "./club-application.entity";
 import {InjectRepository} from "@nestjs/typeorm";
@@ -25,26 +25,25 @@ export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> 
      *
      * @param clubApplicationCreateDto
      */
-    async createApplication(clubApplicationCreateDto: ClubApplicationCreateDto): Promise<number> {
-        const {clubId, studentId} = clubApplicationCreateDto
-        const status: number = 200;
+    async createApplication(clubApplicationCreateDto: ClubApplicationCreateDto): Promise<ClubApplication> {
+        const {clubId, studentId} = clubApplicationCreateDto;
 
         // check if club exists
         const club: Club = await this.clubRepository.findOne({where: {id: clubId}});
         if (club == null) {
-            return 404;
+            throw new HttpException(`Club with id ${clubId} does not exist`, HttpStatus.BAD_REQUEST);
         }
 
         // check if user exists
         const student: User = await this.userRepository.findOne({where: {id: studentId}});
         if (student == null) {
-            return 404;
+            throw new HttpException(`User with id ${studentId} does not exist`, HttpStatus.BAD_REQUEST);
         }
 
         const clubApplication = this.fillClubApplicationEntity(club, studentId);
         await this.repo.save(clubApplication);
 
-        return status;
+        return clubApplication;
     }
 
     /**

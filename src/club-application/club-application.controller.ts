@@ -21,7 +21,7 @@ export class ClubApplicationController implements CrudController<ClubApplication
      * @param clubApplicationCreateDto contains clubId and studentId as Dto
      */
     @Post('/apply')
-    async createClubApplication(@Body() clubApplicationCreateDto: ClubApplicationCreateDto): Promise<number> {
+    async createClubApplication(@Body() clubApplicationCreateDto: ClubApplicationCreateDto): Promise<ClubApplication> {
         return await this.service.createApplication(clubApplicationCreateDto);
     }
 }

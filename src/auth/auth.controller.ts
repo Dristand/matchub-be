@@ -3,6 +3,7 @@ import {LocalAuthGuard} from "./guard/local-auth.guard";
 import {AuthService} from "./auth.service";
 import {JwtAuthGuard} from "./guard/jwt-auth.guard";
 import {UserCreateDto} from "../users/dto/user.create.dto";
+import {User} from "../users/user.entity";
 
 @Controller('auth')
 export class AuthController {
@@ -11,7 +12,7 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/jwt')
-    async helloJwt(@Request() req): Promise<any> {
+    async helloJwt(@Request() req): Promise<User> {
         return req.user;
     }
 
@@ -22,7 +23,7 @@ export class AuthController {
     }
 
     @Post('/register')
-    async register(@Body() userCreateDto: UserCreateDto): Promise<any> {
+    async register(@Body() userCreateDto: UserCreateDto): Promise<User> {
         return await this.authService.register(userCreateDto);
     }
 }

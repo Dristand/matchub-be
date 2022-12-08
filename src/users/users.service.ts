@@ -17,7 +17,7 @@ export class UsersService extends TypeOrmCrudService<User> {
      * @param userCreateDto dto for creating user (studentId, fullName, email, password)
      * @return response
      */
-    async createUser(userCreateDto: UserCreateDto): Promise<User | HttpException> {
+    async createUser(userCreateDto: UserCreateDto): Promise<User> {
         const {studentId, fullName, email, password} = userCreateDto;
         let user: User;
 
