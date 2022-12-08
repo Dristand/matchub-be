@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {TypeOrmCrudService} from "@nestjsx/crud-typeorm";
 import {Club} from "./club.entity";
 import {InjectRepository} from "@nestjs/typeorm";
@@ -30,6 +30,7 @@ export class ClubService extends TypeOrmCrudService<Club> {
      * @return list of Club
      */
     async getClubListForStudent(studentId, status): Promise<Club[]> {
+        // check if user exists
         const studentUser: User = await this.userRepository.findOneBy({id: studentId})
 
         if (studentUser == null) {
@@ -45,7 +46,22 @@ export class ClubService extends TypeOrmCrudService<Club> {
         })
 
         const clubList: Club[] = await this.repo.find();
-        const result: Club[] = [];
+
+        return this.filterClubByStatus(
+            clubList, clubApplication, status
+        );
+    }
+
+    /**
+     * Search for club that fulfill given status parameter
+     *
+     * @param clubList
+     * @param clubApplication
+     * @param status
+     * @return list of Club
+     */
+    filterClubByStatus(clubList: Club[], clubApplication: ClubApplication[], status): Club[] {
+        const filteredClub: Club[] = [];
 
         for (let club of clubList) {
             let applied: boolean = false;
@@ -57,10 +73,10 @@ export class ClubService extends TypeOrmCrudService<Club> {
                 }
             }
 
-            if (status === this.AvailableKeyword && !applied) result.push(club);
-            if (status === this.AppliedKeyword && applied) result.push(club);
+            if (status === this.AvailableKeyword && !applied) filteredClub.push(club);
+            if (status === this.AppliedKeyword && applied) filteredClub.push(club);
         }
 
-        return result;
+        return filteredClub;
     }
 }
