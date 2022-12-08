@@ -17,7 +17,7 @@ export class UsersService extends TypeOrmCrudService<User> {
      * @param userCreateDto dto for creating user (studentId, fullName, email, password)
      * @return response
      */
-    async createUser(userCreateDto: UserCreateDto): Promise<number> {
+    async createUser(userCreateDto: UserCreateDto): Promise<User | HttpException> {
         const {studentId, fullName, email, password} = userCreateDto;
         let user: User;
 
@@ -36,7 +36,9 @@ export class UsersService extends TypeOrmCrudService<User> {
         user = this.fillUserEntity(studentId, fullName, email, password)
         await this.repo.save(user);
 
-        return 200;
+        delete user.password;
+
+        return user;
     }
 
     /**
