@@ -1,6 +1,7 @@
-import {Controller, Get, Param} from '@nestjs/common';
+import {Controller, Get, Param, UseGuards} from '@nestjs/common';
 import {Club} from "./club.entity";
 import {ClubService} from "./club.service";
+import {JwtAuthGuard} from "../auth/guard/jwt-auth.guard";
 
 @Controller('club')
 export class ClubController{
@@ -14,6 +15,7 @@ export class ClubController{
      * @param status: string
      * @param studentId: number
      */
+    @UseGuards(JwtAuthGuard)
     @Get('/:status/:studentId')
     async getClubListForStudent(@Param('status') status: string,
                                 @Param('studentId') studentId: number): Promise<Club[]> {

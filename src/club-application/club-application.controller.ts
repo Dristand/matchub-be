@@ -1,7 +1,8 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Post, UseGuards} from '@nestjs/common';
 import {ClubApplication} from "./club-application.entity";
 import {ClubApplicationService} from "./club-application.service";
 import {ClubApplicationCreateDto} from "./dto/club-application.create.dto";
+import {JwtAuthGuard} from "../auth/guard/jwt-auth.guard";
 
 @Controller('club-application')
 export class ClubApplicationController{
@@ -14,6 +15,7 @@ export class ClubApplicationController{
      *
      * @param clubApplicationCreateDto contains clubId and studentId as Dto
      */
+    @UseGuards(JwtAuthGuard)
     @Post('/apply')
     async createClubApplication(@Body() clubApplicationCreateDto: ClubApplicationCreateDto): Promise<ClubApplication> {
         return await this.service.createApplication(clubApplicationCreateDto);
