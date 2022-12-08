@@ -1,15 +1,9 @@
 import {Controller, Get, Param} from '@nestjs/common';
-import {Crud, CrudController} from "@nestjsx/crud";
 import {Club} from "./club.entity";
 import {ClubService} from "./club.service";
 
-@Crud({
-    model: {
-        type: Club
-    }
-})
 @Controller('club')
-export class ClubController implements  CrudController<Club> {
+export class ClubController{
     constructor(public service: ClubService) {
 
     }
@@ -23,8 +17,6 @@ export class ClubController implements  CrudController<Club> {
     @Get('/:status/:studentId')
     async getClubListForStudent(@Param('status') status: string,
                                 @Param('studentId') studentId: number): Promise<Club[]> {
-        const result = await this.service.getClubListForStudent(studentId, status);
-
-        return result;
+        return await this.service.getClubListForStudent(studentId, status);
     }
 }

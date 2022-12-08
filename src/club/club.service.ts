@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {TypeOrmCrudService} from "@nestjsx/crud-typeorm";
 import {Club} from "./club.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ClubApplication} from "../club-application/club-application.entity";
@@ -7,17 +6,18 @@ import {Repository} from "typeorm";
 import {User} from "../users/user.entity";
 
 @Injectable()
-export class ClubService extends TypeOrmCrudService<Club> {
+export class ClubService {
     private AppliedKeyword: string = "applied";
     private AvailableKeyword: string = "available";
 
+    private clubRepository: Repository<Club>;
     private clubApplicationRepository: Repository<ClubApplication>;
     private userRepository: Repository<User>;
 
-    constructor(@InjectRepository(Club) repo,
+    constructor(@InjectRepository(Club) clubRepo,
                 @InjectRepository(ClubApplication) clubAppRepo,
                 @InjectRepository(User) userRepo) {
-        super(repo);
+        this.clubRepository = clubRepo;
         this.clubApplicationRepository = clubAppRepo;
         this.userRepository = userRepo;
     }
@@ -45,7 +45,7 @@ export class ClubService extends TypeOrmCrudService<Club> {
             }
         })
 
-        const clubList: Club[] = await this.repo.find();
+        const clubList: Club[] = await this.clubRepository.find();
 
         return this.filterClubByStatus(
             clubList, clubApplication, status

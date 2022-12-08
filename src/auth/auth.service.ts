@@ -4,9 +4,11 @@ import {JwtService} from "@nestjs/jwt";
 import * as bcrypt from 'bcrypt';
 import {UserCreateDto} from "../users/dto/user.create.dto";
 import {User} from "../users/user.entity";
+import {Repository} from "typeorm";
 
 @Injectable()
 export class AuthService {
+    private userRepository: Repository<User>;
 
     constructor(private usersService: UsersService,
                 private jwtService: JwtService) {
@@ -19,7 +21,7 @@ export class AuthService {
      * @param password
      */
     async validateUser(email: string, password: string): Promise<any> {
-        const user = await this.usersService.findOne({where: {email: email}});
+        const user = await this.userRepository.findOne({where: {email: email}});
 
         const isMatch = await bcrypt.compare(password, user.password);
 

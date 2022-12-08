@@ -1,14 +1,15 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import {TypeOrmCrudService} from "@nestjsx/crud-typeorm";
 import {User} from "./user.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserCreateDto} from "./dto/user.create.dto";
+import {Repository} from "typeorm";
 
 @Injectable()
-export class UsersService extends TypeOrmCrudService<User> {
+export class UsersService {
+    private userRepository: Repository<User>;
 
-    constructor(@InjectRepository(User) repo) {
-        super(repo);
+    constructor(@InjectRepository(User) userRepo) {
+        this.userRepository = userRepo;
     }
 
     /**
@@ -22,19 +23,19 @@ export class UsersService extends TypeOrmCrudService<User> {
         let user: User;
 
         // check if email used already
-        user = await this.repo.findOne({where: {email: email}});
+        user = await this.userRepository.findOne({where: {email: email}});
         if (user != null) {
             throw new HttpException('Email is already being used by another user', HttpStatus.BAD_REQUEST);
         }
 
         // check if studentId used already
-        user = await this.repo.findOne({where: {studentId: studentId}});
+        user = await this.userRepository.findOne({where: {studentId: studentId}});
         if (user != null) {
             throw new HttpException('Student ID is already being used by another user', HttpStatus.BAD_REQUEST);
         }
 
         user = this.fillUserEntity(studentId, fullName, email, password)
-        await this.repo.save(user);
+        await this.userRepository.save(user);
 
         delete user.password;
 

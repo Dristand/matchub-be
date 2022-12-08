@@ -1,16 +1,10 @@
 import {Body, Controller, Post} from '@nestjs/common';
-import {Crud, CrudController} from "@nestjsx/crud";
 import {ClubApplication} from "./club-application.entity";
 import {ClubApplicationService} from "./club-application.service";
 import {ClubApplicationCreateDto} from "./dto/club-application.create.dto";
 
-@Crud({
-    model: {
-        type: ClubApplication
-    }
-})
 @Controller('club-application')
-export class ClubApplicationController implements CrudController<ClubApplication> {
+export class ClubApplicationController{
     constructor(public service: ClubApplicationService) {
 
     }

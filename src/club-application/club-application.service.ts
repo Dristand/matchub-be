@@ -1,5 +1,4 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import {TypeOrmCrudService} from "@nestjsx/crud-typeorm";
 import {ClubApplication} from "./club-application.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Club} from "../club/club.entity";
@@ -8,14 +7,15 @@ import {User} from "../users/user.entity";
 import {ClubApplicationCreateDto} from "./dto/club-application.create.dto";
 
 @Injectable()
-export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> {
+export class ClubApplicationService {
     private clubRepository: Repository<Club>;
+    private clubApplicationRepository: Repository<ClubApplication>;
     private userRepository: Repository<User>;
 
-    constructor(@InjectRepository(ClubApplication) repo,
+    constructor(@InjectRepository(ClubApplication) clubAppRepo,
                 @InjectRepository(Club) clubRepo,
                 @InjectRepository(User) userRepo) {
-        super(repo);
+        this.clubApplicationRepository = clubAppRepo;
         this.clubRepository = clubRepo;
         this.userRepository = userRepo;
     }
@@ -40,8 +40,11 @@ export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> 
             throw new HttpException(`User with id ${studentId} does not exist`, HttpStatus.BAD_REQUEST);
         }
 
-        const clubApplication = this.fillClubApplicationEntity(club, studentId);
-        await this.repo.save(clubApplication);
+        const clubApplication = this.fillClubApplicationEntity(club, student);
+        await this.clubApplicationRepository.save(clubApplication);
+
+        delete clubApplication.club.applicantList;
+        delete clubApplication.user.password;
 
         return clubApplication;
     }
