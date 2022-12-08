@@ -11,6 +11,12 @@ export class AuthService {
                 private jwtService: JwtService) {
     }
 
+    /**
+     * validateUser using bcrypt comparison for hashing the password.
+     *
+     * @param email
+     * @param password
+     */
     async validateUser(email: string, password: string): Promise<any> {
         const user = await this.usersService.findOne({where: {email: email}});
 
@@ -25,6 +31,12 @@ export class AuthService {
         return null;
     }
 
+    /**
+     * Login method given user request
+     *
+     * @param user
+     * @return jwt token of the user
+     */
     async login(user: any) {
         const payload = {email: user.email, sub: user.id};
 
@@ -33,16 +45,12 @@ export class AuthService {
         }
     }
 
+    /**
+     * Register user based on validated UserCreateDto
+     *
+     * @param userCreateDto
+     */
     async register(userCreateDto: UserCreateDto): Promise<any> {
-        let response: number = 200;
-
-        // TODO: implement response for error
-        try {
-            response = await this.usersService.createUser(userCreateDto);
-        } catch (err) {
-            return 400;
-        }
-
-        return response;
+        return await this.usersService.createUser(userCreateDto);
     }
 }

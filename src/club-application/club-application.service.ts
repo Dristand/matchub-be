@@ -5,6 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Club} from "../club/club.entity";
 import {Repository} from "typeorm";
 import {User} from "../users/user.entity";
+import {ClubApplicationCreateDto} from "./dto/club-application.create.dto";
 
 @Injectable()
 export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> {
@@ -19,8 +20,12 @@ export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> 
         this.userRepository = userRepo;
     }
 
-    // TODO: make generalized response/error
-    async createApplication(clubApplicationCreateDto): Promise<number> {
+    /**
+     * Create clubApplication based on validated ClubApplicationCreateDto
+     *
+     * @param clubApplicationCreateDto
+     */
+    async createApplication(clubApplicationCreateDto: ClubApplicationCreateDto): Promise<number> {
         const {clubId, studentId} = clubApplicationCreateDto
         const status: number = 200;
 
@@ -42,6 +47,13 @@ export class ClubApplicationService extends TypeOrmCrudService<ClubApplication> 
         return status;
     }
 
+    /**
+     * Create clubApplication entity given mandatory parameter
+     *
+     * @param club
+     * @param student
+     * @return Completed ClubApplication entity
+     */
     fillClubApplicationEntity(club, student): ClubApplication {
         const clubApplication: ClubApplication = new ClubApplication();
         clubApplication.club = club;

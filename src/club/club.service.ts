@@ -27,6 +27,7 @@ export class ClubService extends TypeOrmCrudService<Club> {
      *
      * @param studentId: number
      * @param status: string (const on class attribute)
+     * @return list of Club
      */
     async getClubListForStudent(studentId, status): Promise<Club[]> {
         const studentUser: User = await this.userRepository.findOneBy({id: studentId})
