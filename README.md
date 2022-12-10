@@ -4,23 +4,22 @@
 
 Backend of Club Application app.
 
+## Demo
+Swagger <br>
+http://35.225.195.132:3000/ <br>
+Adminer (DB Management) <br>
+http://35.225.195.132:8080/ <br>
+
+## Requirements
+1. [Docker (Latest)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+2. Docker Compose (Latest)
+
 ## Installation
 
 ```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ git clone https://github.com/Dristand/matchub-be.git
+$ cd matchub-be
+$ docker compose -f ./docker-compose.yml up -d
 ```
 
 ## Important URL
