@@ -21,4 +21,15 @@ export class ClubController{
                                 @Param('studentId') studentId: number): Promise<Club[]> {
         return await this.service.getClubListForStudent(studentId, status);
     }
+
+    /**
+     * Controller for getClubById
+     *
+     * @param clubId
+     */
+    @UseGuards(JwtAuthGuard)
+    @Get('/:clubId')
+    async getClubById(@Param('clubId') clubId: number): Promise<Club> {
+        return await this.service.getClubById(clubId);
+    }
 }

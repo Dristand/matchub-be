@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {Club} from "./club.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ClubApplication} from "../club-application/club-application.entity";
@@ -50,6 +50,27 @@ export class ClubService {
         return this.filterClubByStatus(
             clubList, clubApplication, status
         );
+    }
+
+
+    /**
+     * Return Club based on given Club Id
+     *
+     * @param clubId
+     * @return Club entity
+     */
+    async getClubById(clubId): Promise<Club> {
+        // check if club exists
+        const club: Club = await this.clubRepository.findOneBy({id: clubId})
+
+        if (club == null) {
+            throw new HttpException("Club does not exists", HttpStatus.BAD_REQUEST);
+        }
+
+        // remove sensitive information
+        delete club.applicantList
+
+        return club;
     }
 
     /**
