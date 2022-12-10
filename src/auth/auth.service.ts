@@ -6,7 +6,6 @@ import {UserCreateDto} from "../users/dto/user.create.dto";
 import {User} from "../users/user.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
-import {jwtConstants} from "../helper/const";
 
 @Injectable()
 export class AuthService {
@@ -53,7 +52,7 @@ export class AuthService {
 
         return {
             access_token: this.jwtService.sign(payload, {
-                secret: jwtConstants.secret,
+                secret: process.env.JWT_SECRET,
                 expiresIn: '2w',
             }),
         }
