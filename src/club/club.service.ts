@@ -25,20 +25,20 @@ export class ClubService {
     /**
      * Return ClubList requested by student based on its status (applied/available club)
      *
-     * @param studentId: number
+     * @param userId: number
      * @param status: string (const on class attribute)
      * @return list of Club
      */
-    async getClubListForStudent(studentId, status): Promise<Club[]> {
+    async getClubListForStudent(userId, status): Promise<Club[]> {
         // check if user exists
-        const studentUser: User = await this.userRepository.findOneBy({id: studentId})
+        const studentUser: User = await this.userRepository.findOneBy({id: userId})
 
         if (studentUser == null) {
             return [];
         }
 
         const clubApplication: ClubApplication[] = await this.clubApplicationRepository.find({
-            where: {user: {id: studentId}},
+            where: {user: {id: userId}},
             relations: {
                 club: true,
                 user: true,
