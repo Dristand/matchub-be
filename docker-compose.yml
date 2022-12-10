@@ -4,17 +4,32 @@ services:
   postgres:
     container_name: matchub-postgres
     image: 'postgres:15'
-    restart: always
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
       - '5432:5432'
     volumes:
       - postgres:/var/lib/postgresql/data/
-  
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
   adminer:
     container_name: matchub-adminer
-    image: 'adminer:latest'
+    image: adminer:latest
+    restart: always
     ports:
-      - '3645:3645'
+      - '8080:8080'
+    depends_on:
+      - postgres
 
 volumes:
   postgres:
+  pgadmin:
