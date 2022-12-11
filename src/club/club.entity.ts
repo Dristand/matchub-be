@@ -33,6 +33,10 @@ export class Club {
     contactPersonNumber: string;
 
     @ApiProperty()
+    @Column({default: "Student Organization"})
+    organizer: string;
+
+    @ApiProperty()
     @OneToMany("ClubApplication",
         (clubApplication: ClubApplication) => clubApplication.club,
         {eager: true},

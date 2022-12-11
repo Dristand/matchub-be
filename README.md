@@ -10,6 +10,7 @@ Backend of Club Application app.
    2. Applied list
 2. Users are able to apply to a club
    1. (assuming) No duplicate application -> future acceptance system the data will be deleted (soft/hard will depends later on)
+   2. Users are able to get details on the said club (excluding applicant list)
 3. Authentication 
    1. Local strategy for password authentication
    2. Jwt strategy for authorization
@@ -23,6 +24,8 @@ Backend of Club Application app.
 4. BaseUser for future improvement when we're introducing new type of user such as ClubOwner, Admin, etc
 5. Replica database for read to improve data reading (since we're focusing on reading operation)
 6. Create docker image for production
+7. Unit Testing & Integration Testing :)
+8. Kubernetes for multi host deployment (since docker compose only support one host machine)
 
 ## Demo
 Swagger <br>
@@ -45,14 +48,14 @@ $ docker compose -f ./docker-compose.yml up -d
 
 ## Important URL
 ```bash
-# Swagger (API Documentation)
+# Api (Swagger on Index Page)
 $ host:3000/
 
 # Postgresql (Database)
 $ host:5432/
 
 # Adminer (Database Management Tool)
-$ host:3645
+$ host:3645/
 ```
 
 ## Stay in touch

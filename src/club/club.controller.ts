@@ -1,4 +1,4 @@
-import {Controller, Get, Param, UseGuards} from '@nestjs/common';
+import {Controller, Get, Param, Request, UseGuards} from '@nestjs/common';
 import {Club} from "./club.entity";
 import {ClubService} from "./club.service";
 import {JwtAuthGuard} from "../auth/guard/jwt-auth.guard";
@@ -12,14 +12,16 @@ export class ClubController{
     /**
      * Controller for getClubListForStudent
      *
+     * @param req request needed to extract user from jwt
      * @param status: string
-     * @param studentId: number
      */
     @UseGuards(JwtAuthGuard)
-    @Get('/:status/:studentId')
-    async getClubListForStudent(@Param('status') status: string,
-                                @Param('studentId') studentId: number): Promise<Club[]> {
-        return await this.service.getClubListForStudent(studentId, status);
+    @Get('/:status')
+    async getClubListForStudent(@Request() req,
+                                @Param('status') status: string): Promise<Club[]> {
+        const userFromJWT = req.user;
+
+        return await this.service.getClubListForStudent(userFromJWT, status);
     }
 
     /**
@@ -28,7 +30,7 @@ export class ClubController{
      * @param clubId
      */
     @UseGuards(JwtAuthGuard)
-    @Get('/:clubId')
+    @Get('/detail/:clubId')
     async getClubById(@Param('clubId') clubId: number): Promise<Club> {
         return await this.service.getClubById(clubId);
     }

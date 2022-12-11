@@ -25,11 +25,14 @@ export class ClubService {
     /**
      * Return ClubList requested by student based on its status (applied/available club)
      *
-     * @param userId: number
-     * @param status: string (const on class attribute)
+     * @param userFromJwt userFromJwt user entity extracted from jwt token
+     * @param status string (const on class attribute)
      * @return list of Club
      */
-    async getClubListForStudent(userId, status): Promise<Club[]> {
+    async getClubListForStudent(userFromJwt, status): Promise<Club[]> {
+        const {id} = userFromJwt;
+        const userId = id;
+
         // check if user exists
         const studentUser: User = await this.userRepository.findOneBy({id: userId})
 
