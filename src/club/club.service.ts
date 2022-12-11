@@ -46,7 +46,6 @@ export class ClubService {
                 user: true,
             }
         })
-        console.log(clubApplication)
 
         const clubList: Club[] = await this.clubRepository.find();
 
