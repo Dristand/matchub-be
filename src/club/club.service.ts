@@ -30,10 +30,10 @@ export class ClubService {
      * @return list of Club
      */
     async getClubListForStudent(userFromJwt, status): Promise<Club[]> {
-        const {id, email} = userFromJwt;
+        const {userId, email} = userFromJwt;
 
         // check if user exists
-        const studentUser: User = await this.userRepository.findOneBy({id: id})
+        const studentUser: User = await this.userRepository.findOneBy({id: userId})
 
         if (studentUser == null) {
             return [];

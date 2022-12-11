@@ -25,9 +25,8 @@ export class ClubApplicationService {
      * @param clubId
      * @param userFromJwt user entity extracted from jwt token
      */
-    async createApplication(clubId: number, userFromJwt: User): Promise<ClubApplication> {
-        const {id} = userFromJwt;
-        const userId = id;
+    async createApplication(clubId: number, userFromJwt): Promise<ClubApplication> {
+        const {userId} = userFromJwt;
 
         // check if club exists
         const club: Club = await this.clubRepository.findOne({where: {id: clubId}});
